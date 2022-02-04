@@ -23,7 +23,7 @@ public class BaseClass {
 		loadProperties();
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
-		driver.get("http://96.84.175.78/MMP-Release2-Integrated-Build.6.8.000/portal/login.php");	
+		 
 		
 		
 	}
