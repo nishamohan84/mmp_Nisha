@@ -19,14 +19,14 @@ public class ScheduleAppointmentTest extends BaseClass {
 		LoginPage lPage  = new LoginPage(driver);
 		HomePage hPage = lPage.login(pro.getProperty("patientusername"),pro.getProperty("patientpassword"));
 		hPage.navigateToAModule("Schedule Appointment");
+		ScheduleAppointmentPage sPage = new ScheduleAppointmentPage(driver);
 		String date=AppLibrary.getFutureDate(15,"MMMM/dd/YYYY");
 		String expectedDateFormat=AppLibrary.getFutureDate(15,"MM/dd/YYYY");
-		ScheduleAppointmentPage sPage = new ScheduleAppointmentPage(driver);
 		HashMap<String,String> actualHMap = sPage.scheduleAppointment(pro.getProperty("doctor"),date,"10Am","Fever");
 		Assert.assertEquals(actualHMap.get("date"), expectedDateFormat);
 		Assert.assertEquals(actualHMap.get("time"), "10Am");
 		Assert.assertEquals(actualHMap.get("doctor"),"Beth" );
-		Assert.assertEquals(actualHMap.get("sym"), "Fever");
+		Assert.assertEquals(actualHMap.get("symptoms"), "Fever");
 		System.out.println("Executed the tests successfully");
 
 	}
