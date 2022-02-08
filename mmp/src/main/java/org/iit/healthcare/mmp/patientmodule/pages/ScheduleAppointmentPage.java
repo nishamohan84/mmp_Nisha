@@ -9,22 +9,36 @@ import org.openqa.selenium.support.ui.Select;
 public class ScheduleAppointmentPage {
 
 	protected WebDriver driver;
-	private String drName;
-	private By newAppointmentButton = By.cssSelector( "input[value='Create new appointment']");
-	private By selectDoctor = By.xpath("//h4[normalize-space()='Dr."+drName+"']/ancestor::ul/following-sibling::button" );
-	private By datePickerId = By.id("datepicker");
-	private By yearDatePicker = By.cssSelector(".ui-datepicker-year");
-	private By monthDatePicker = By.cssSelector(".ui-datepicker-month");
-	private By arrowDatePicker = By.xpath("//span[@class='ui-icon ui-icon-circle-triangle-e']");
-	private By timeID = By.id("time");
-	private By continueButton =  By.id("ChangeHeatName") ;
-	private By symptomsID =  By.id("sym");
-	private By submitButton = By.cssSelector("input[value='Submit']");
-	private By actualDateXpath = By.xpath("//table[@class='table']/tbody/tr[1]/td[1]");
-	private By actualTimeXpath = By.xpath("//table[@class='table']/tbody/tr[1]/td[2]");
-	private By actualAppointmentXpath = By.xpath("//table[@class='table']/tbody/tr[1]/td[3]");
-	private By actualDoctorXpath = By.xpath("//table[@class='table']/tbody/tr[1]/td[4]");
-	 
+	private String doctorName;
+//	private By newAppointmentButton = By.cssSelector( "input[value='Create new appointment']");
+//	private By selectDoctor = By.xpath("//h4[normalize-space()='Dr."+doctorName+"']/ancestor::ul/following-sibling::button" );
+//	private By datePickerId = By.id("datepicker");
+//	private By yearDatePicker = By.cssSelector(".ui-datepicker-year");
+//	private By monthDatePicker = By.cssSelector(".ui-datepicker-month");
+//	private By arrowDatePicker = By.xpath("//span[@class='ui-icon ui-icon-circle-triangle-e']");
+//	private By timeID = By.id("time");
+//	private By continueButton =  By.id("ChangeHeatName") ;
+//	private By symptomsID =  By.id("sym");
+//	private By submitButton = By.cssSelector("input[value='Submit']");
+//	private By actualDateXpath = By.xpath("//table[@class='table']/tbody/tr[1]/td[1]");
+//	private By actualTimeXpath = By.xpath("//table[@class='table']/tbody/tr[1]/td[2]");
+//	private By actualAppointmentXpath = By.xpath("//table[@class='table']/tbody/tr[1]/td[3]");
+//	private By actualDoctorXpath = By.xpath("//table[@class='table']/tbody/tr[1]/td[4]");
+	
+	private By newAppointmentButton=By.xpath("//input[@value='Create new appointment']");
+	private By selectDoctor=By.xpath("//h4[normalize-space()='Dr."+doctorName+"']/ancestor::ul/following-sibling::button");
+	private By datePickerId=By.xpath("//input[@id='datepicker']");
+	private By yearDatePicker=By.xpath("//span[@class='ui-datepicker-year']");
+	private By arrowDatePicker=By.cssSelector(".ui-icon.ui-icon-circle-triangle-e");
+	private By monthDatePicker=By.xpath("//span[@class='ui-datepicker-month']");
+	private By timeId=By.xpath("//select[@id='time']");
+	private By continueButton=By.cssSelector("#ChangeHeatName");
+	private By symptomsId=By.xpath("//textarea[@id='sym']");
+	private By submitButton=By.xpath("//input[@value='Submit']");
+	private By actualDateXpath=By.xpath("//table[@class='table']/tbody/tr[1]/td[1]");
+	private By actualTimeXpath=By.xpath("//table[@class='table']/tbody/tr[1]/td[2]");
+	private By actualSymptomXpath=By.xpath("//table[@class='table']/tbody/tr[1]/td[3]");
+	private By actualDocXpath=By.xpath("//table[@class='table']/tbody/tr[1]/td[4]");
 	
 	public ScheduleAppointmentPage(WebDriver driver)
 	{
@@ -32,58 +46,157 @@ public class ScheduleAppointmentPage {
 		 
 	}
 	
-	public HashMap<String, String> scheduleAppointment(String doctorName,String date, String time,String sym)
+	
+	//schedule appointment
+	public HashMap<String,String> scheduleAppointment(String doctorName,String date,String time,String symptoms)
 	{
+		HashMap<String,String>hmap=new HashMap<String,String>();
 		
-		   		HashMap<String,String> hMap= new HashMap<String,String>();
-		   		 
-				//Create New Appointment button
-				driver.findElement(newAppointmentButton).click();
-				
-				//Select the doctor
-				drName=doctorName;
-				
-				driver.findElement(selectDoctor).click();
-				//Switch to a frame
-				driver.switchTo().frame("myframe");		
-				//Datepicker
-				driver.findElement(datePickerId).click();
-			
-				String expectedDate = date;
-				 
-				String expectedDateArr[] = expectedDate.split("/");
-				String expMonth=expectedDateArr[1];
-				String expDay=expectedDateArr[0];
-				String expYear=expectedDateArr[2];
-				
-				String actualYear = driver.findElement(yearDatePicker).getText();
-				
-				while(!(actualYear.equals(expYear)))
-				{
-					driver.findElement(arrowDatePicker).click();
-					actualYear = driver.findElement(yearDatePicker).getText();
-				}
-				String actualMonth=driver.findElement(monthDatePicker).getText();
-				while(!(actualMonth.equals(expMonth)))
-				{
-					driver.findElement(arrowDatePicker).click();
-					actualMonth=driver.findElement(monthDatePicker).getText();
-				}
-				driver.findElement(By.linkText(expDay)).click();
-				Select timeSelect = new Select(driver.findElement(timeID));
-				timeSelect.selectByVisibleText(time);
-				driver.findElement(continueButton).click();
-				driver.findElement(symptomsID).sendKeys(sym);
-				driver.findElement(submitButton).click();
-				String actualDate = driver.findElement(actualDateXpath).getText().trim();
-				String actualTime = driver.findElement(actualTimeXpath).getText().trim();
-				String actualAppointment = driver.findElement(actualAppointmentXpath).getText().trim();
-				String actualDoctor= driver.findElement(actualDoctorXpath).getText().trim();
-				
-				hMap.put("date",  actualDate);
-				hMap.put("time",  actualTime);
-				hMap.put("sym",  actualAppointment);
-				hMap.put("doctor",  actualDoctor);
-				return hMap;
+		
+		driver.findElement(newAppointmentButton).click();
+		
+		//Select doctor
+		this.doctorName=doctorName;
+		driver.findElement(By.xpath("//h4[normalize-space()='Dr."+doctorName+"']/ancestor::ul/following-sibling::button")).click();
+		
+		driver.switchTo().frame(0);
+		driver.findElement(datePickerId).click();
+		String expecteddate=date;
+	    String datearray[]=expecteddate.split("/");
+		String exp_month=datearray[0];
+		String exp_day=datearray[1];
+		String exp_year=datearray[2];
+		
+		String act_yr=driver.findElement(yearDatePicker).getText();
+		while(!exp_year.equals(act_yr))
+		{
+			driver.findElement(arrowDatePicker).click();
+			act_yr=driver.findElement(yearDatePicker).getText();
+		}
+		String act_month=driver.findElement(monthDatePicker).getText();
+		while(!exp_month.equals(act_month))
+		{
+			driver.findElement(arrowDatePicker).click();
+			act_month=driver.findElement(monthDatePicker).getText();
+		}
+		driver.findElement(By.linkText(exp_day)).click();	
+		
+		//time
+		Select timedrop=new Select(driver.findElement(timeId));
+		timedrop.selectByVisibleText(time);
+		
+		driver.findElement(continueButton).click();
+		//Symptoms
+		
+		driver.findElement(symptomsId).sendKeys(symptoms);
+		driver.findElement(submitButton).click();
+		
+		String act_date=driver.findElement(actualDateXpath).getText();
+		String act_time=driver.findElement(actualTimeXpath).getText();
+		String act_sym=driver.findElement(actualSymptomXpath).getText();
+		String act_doc=driver.findElement(actualDocXpath).getText();
+		hmap.put("date", act_date);
+		hmap.put("time", act_time);
+		hmap.put("symptoms",  act_sym);
+		hmap.put("doctor", act_doc);
+		return hmap;
 	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//	
+//	public HashMap<String, String> scheduleAppointment(String doctorName,String date, String time,String sym)
+//	{
+//		
+//		   		HashMap<String,String> hMap= new HashMap<String,String>();
+//		   		 
+//				//Create New Appointment button
+//				driver.findElement(newAppointmentButton).click();
+//				
+//				//Select the doctor
+//			//	drName=doctorName;
+//				this.doctorName=doctorName;
+//				driver.findElement(By.xpath("//h4[normalize-space()='Dr."+doctorName+"']/ancestor::ul/following-sibling::button")).click();
+//				
+//				driver.findElement(selectDoctor).click();
+//				//Switch to a frame
+//				driver.switchTo().frame("myframe");		
+//				//Datepicker
+//				driver.findElement(datePickerId).click();
+//			
+//				String expectedDate = date;
+//				 
+//				String expectedDateArr[] = expectedDate.split("/");
+//				String expMonth=expectedDateArr[1];
+//				String expDay=expectedDateArr[0];
+//				String expYear=expectedDateArr[2];
+//				
+//				String actualYear = driver.findElement(yearDatePicker).getText();
+//				
+//				while(!(actualYear.equals(expYear)))
+//				{
+//					driver.findElement(arrowDatePicker).click();
+//					actualYear = driver.findElement(yearDatePicker).getText();
+//				}
+//				String actualMonth=driver.findElement(monthDatePicker).getText();
+//				while(!(actualMonth.equals(expMonth)))
+//				{
+//					driver.findElement(arrowDatePicker).click();
+//					actualMonth=driver.findElement(monthDatePicker).getText();
+//				}
+//				driver.findElement(By.linkText(expDay)).click();
+//				Select timeSelect = new Select(driver.findElement(timeID));
+//				timeSelect.selectByVisibleText(time);
+//				driver.findElement(continueButton).click();
+//				driver.findElement(symptomsID).sendKeys(sym);
+//				driver.findElement(submitButton).click();
+//				String actualDate = driver.findElement(actualDateXpath).getText().trim();
+//				String actualTime = driver.findElement(actualTimeXpath).getText().trim();
+//				String actualAppointment = driver.findElement(actualAppointmentXpath).getText().trim();
+//				String actualDoctor= driver.findElement(actualDoctorXpath).getText().trim();
+//				
+//				hMap.put("date",  actualDate);
+//				hMap.put("time",  actualTime);
+//				hMap.put("sym",  actualAppointment);
+//				hMap.put("doctor",  actualDoctor);
+//				return hMap;
+//	}
 }
