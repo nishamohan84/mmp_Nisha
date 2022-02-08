@@ -8,7 +8,7 @@ public class LoginPage {
 	protected WebDriver driver;
 	private By usernameBy = By.id("username");
 	private By passwordBy = By.id("password");
-	private By submitBy = By.cssSelector("input[value='Sign In']");
+	private By signinBy=By.cssSelector("input[value='Sign In']");
 	public LoginPage(WebDriver driver)
 	{
 		this.driver = driver;
@@ -18,7 +18,7 @@ public class LoginPage {
 
 		driver.findElement(usernameBy).sendKeys(uname);
 		driver.findElement(passwordBy).sendKeys(pword);
-		driver.findElement(submitBy).click();
+		driver.findElement(signinBy).click();
 		return new HomePage(driver);
 	}
 

@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 
 public class MMPLibrary {
 	
-	WebDriver driver;
+	 WebDriver driver;
 	
 	public MMPLibrary(WebDriver driver)
 	{
