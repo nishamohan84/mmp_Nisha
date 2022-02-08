@@ -1,3 +1,5 @@
+
+
 package org.iit.healthcare.mmp.adminmodule.tests;
 
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import org.iit.healthcare.mmp.MMPLibrary;
 import org.iit.healthcare.mmp.adminmodule.pages.MessagesPage;
 import org.iit.healthcare.mmp.patientmodule.pages.HomePage;
 import org.iit.healthcare.mmp.patientmodule.pages.SendMessagesPage;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class MessagesTest extends BaseClass {
@@ -23,11 +26,11 @@ public class MessagesTest extends BaseClass {
 	SendMessagesPage sPage=new SendMessagesPage(driver);
 	HashMap<String,String>expectedHMap=sPage.sendMessages("Need to get appointment", "High fever");
 	lib.launchBrowser(pro.getProperty("adminURL"));
-	lPage=new LoginPage(driver);
 	hPage=lPage.login(pro.getProperty("adminusername"), pro.getProperty("adminpassword"));
 	hPage.navigateToAModule("Messages");
 	MessagesPage mPage= new MessagesPage(driver);
 	HashMap<String,String>actualHMap=mPage.getMessageDetails();
+	Assert.assertEquals(expectedHMap, actualHMap);
 	}
 
 }
